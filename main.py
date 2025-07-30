@@ -16,14 +16,14 @@ class ProfilUtilisateur(BaseModel):
     competences: str
 
 # Connexion SQL
-conn_str = (
-    "Driver={SQL Server};"
-    "Server=MDG-LT075;"
-    "Database=MoovAstek_V1;"
-    "Trusted_Connection=yes;"
-    "TrustServerCertificate=yes;"
-)
-conn = pyodbc.connect(conn_str)
+# conn_str = (
+#     "Driver={SQL Server};"
+#     "Server=MDG-LT075;"
+#     "Database=MoovAstek_V1;"
+#     "Trusted_Connection=yes;"
+#     "TrustServerCertificate=yes;"
+# )
+# conn = pyodbc.connect(conn_str)
 
 # Charger le modèle NLP une fois
 model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -37,7 +37,10 @@ def recommander(profil: ProfilUtilisateur):
     LEFT JOIN ElementList el ON o.ID_Cities = el.ID_Element
     WHERE o.Status = 1;
     """
-    df = pd.read_sql(query, conn)
+    df = pd.DataFrame([
+        {"titre": "Développeur Python", "summary": "Travail sur des projets IA", "city": "Paris"},
+        {"titre": "Data Scientist", "summary": "Analyse de données client", "city": "Lyon"}
+    ])
     df.rename(columns={"Titre": "titre", "Summary": "summary"}, inplace=True)
     df.dropna(subset=["titre", "city", "summary"], inplace=True)
 
